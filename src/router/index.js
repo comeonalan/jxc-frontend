@@ -4,11 +4,12 @@ import Router from 'vue-router'
 import addShop from '../views/addShop.vue'
 import view2 from '../views/view2.vue'
 import home from '../views/home.vue'
-import addProduct from '../views/addProduct.vue'
+//import addProduct from '../views/addProduct.vue'
 
 //厂家管理
- 
 import displayVender from '../views/vender/displayVender.vue'
+//商品管理
+import product from '../views/product/product.vue'
 
 Vue.use(Router)
 
@@ -42,9 +43,10 @@ export default new Router({
     component: home,
     name: '商品管理',
     iconCls: 'fa fa-cube',
+    leaf: true,
     children: [
-        { path: '/addShop', component: addShop, name: '页面4' },
-        { path: '/addShop', component: addShop, name: '页面5' }
+        { path: '/product', component: product, name: '商品管理' }
+         
     ]
 },
 {
