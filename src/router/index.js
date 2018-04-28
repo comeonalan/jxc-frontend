@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import addShop from '../views/addShop.vue'
 import view2 from '../views/view2.vue'
 import home from '../views/home.vue'
 //import addProduct from '../views/addProduct.vue'
@@ -12,6 +11,8 @@ import displayVender from '../views/vender/displayVender.vue'
 import product from '../views/product/product.vue'
 //店铺管理
 import shop from '../views/shop/shop.vue'
+//客户管理
+import customer from '../views/customer/customer.vue'
 
 Vue.use(Router)
 
@@ -56,9 +57,9 @@ export default new Router({
     component: home,
     name: '客户管理',
     iconCls: 'fa fa-address-card',
-    // leaf: true,//只有一个节点
+    leaf: true,//只有一个节点
     children: [
-        { path: '/addShop', component: addShop, name: '客户' }
+        { path: '/customer', component: customer, name: '客户管理' }
     ]
 },
 {
@@ -68,7 +69,7 @@ export default new Router({
     iconCls: 'fa fa-file-text-o',
     // leaf: true,//只有一个节点
     children: [
-        { path: '/addShop', component: addShop, name: '客户' }
+        { path: '/customer', component: customer, name: '客户' }
     ]
 },
 {
@@ -87,7 +88,7 @@ export default new Router({
     name: '图表分析',
     iconCls: 'fa fa-bar-chart',
     children: [
-        { path: '/addShop', component: addShop, name: 'echarts' }
+        { path: '/customer', component: customer, name: 'echarts' }
     ]
 },
   ]
