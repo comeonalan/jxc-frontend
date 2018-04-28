@@ -10,6 +10,8 @@ import home from '../views/home.vue'
 import displayVender from '../views/vender/displayVender.vue'
 //商品管理
 import product from '../views/product/product.vue'
+//店铺管理
+import shop from '../views/shop/shop.vue'
 
 Vue.use(Router)
 
@@ -74,9 +76,9 @@ export default new Router({
     component: home,
     name: '店铺管理',
     iconCls: 'fa fa-bank',
-    // leaf: true,//只有一个节点
+    leaf: true,//只有一个节点
     children: [
-        { path: '/addShop', component: addShop, name: '客户' }
+        { path: '/shop', component: shop, name: '店铺管理' }
     ]
 },
 {

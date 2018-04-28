@@ -21,8 +21,8 @@
 			</el-table-column>
 			<el-table-column type="index" width="60">
 			</el-table-column>
-		 <el-table-column prop="id" v-if=false width="180" >
-			</el-table-column>
+		 <!-- <el-table-column prop="id" v-if=false width="180" >
+			</el-table-column> -->
 			<el-table-column prop="name" label="厂家名称" width="180" sortable>
 			</el-table-column>
 		  <el-table-column prop="address" label="地址" min-width="180" sortable>

@@ -4,10 +4,10 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.type" placeholder="商品型号"></el-input>
+					<el-input v-model="filters.name" placeholder="店铺名称"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getProducts">查询</el-button>
+					<el-button type="primary" v-on:click="getShops">查询</el-button>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -16,19 +16,18 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="products" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="shops" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column type="index" width="60">
 			</el-table-column>
 		 <!-- <el-table-column prop="id" v-if=false width="180" >
 			</el-table-column> -->
-			<el-table-column prop="venderName" label="厂家名称" width="200" sortable>
+			<el-table-column prop="name" label="店铺名称" width="200" sortable>
 			</el-table-column>
-		  <el-table-column prop="type" label="商品型号"  width="200" sortable>
+		  <el-table-column prop="address" label="店铺地址"  width="200" sortable>
 			</el-table-column>
-      <el-table-column prop="name" label="商品名称" width="200" sortable>
-			</el-table-column>
+       
 			<el-table-column label="操作" width="150">
 				<template slot-scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -52,17 +51,15 @@
 					<el-input v-model="editForm.id" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="厂家名称" prop="venderName">
-					<el-input v-model="editForm.venderName" :disabled=true auto-complete="off"></el-input>
+				<el-form-item label="店铺名称" prop="name">
+					<el-input v-model="editForm.name" :disabled=true auto-complete="off"></el-input>
 				</el-form-item>
 			 
-				<el-form-item label="商品型号" prop="type">
-					<el-input v-model="editForm.type" ></el-input>
+				<el-form-item label="店铺地址" prop="address">
+					<el-input v-model="editForm.address" ></el-input>
 				</el-form-item>
 				 
-				<el-form-item label="商品名称">
-					<el-input v-model="editForm.name"></el-input>
-				</el-form-item>
+			 
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -73,24 +70,14 @@
 		<!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="厂家名称" prop="venderId">
-					
-					 <el-select v-model="addForm.venderId" filterable placeholder="请选择" >
-                    <el-option
-                           v-for="item in venders"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
-                   </el-option>
-                   </el-select>
-				</el-form-item>
+				 
 			
-				<el-form-item label="型号" prop="type">
-					<el-input v-model="addForm.type" auto-complete="off"></el-input>
+				<el-form-item label="店铺名称" prop="name">
+					<el-input v-model="addForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 			 
-				<el-form-item label="名称" >
-					<el-input  v-model="addForm.name"></el-input>
+				<el-form-item label="店铺地址" >
+					<el-input  v-model="addForm.address"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -110,10 +97,10 @@ export default {
   data() {
     return {
       filters: {
-        type: ""
+        name: ""
       },
-      products: [],
-	  venders:[],
+      shops: [],
+	  
       total: 0,
       page: 1,
       listLoading: false,
@@ -122,44 +109,44 @@ export default {
       editFormVisible: false, //编辑界面是否显示
       editLoading: false,
       editFormRules: {
-        type: [{ required: true, message: "请输入商品型号", trigger: "blur" }]
+        name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }]
       },
       //编辑界面数据
       editForm: {
         id: 0,
         name: "",
-        type: "",
-        venderName: ""
+        address: "",
+        
       },
 
       addFormVisible: false, //新增界面是否显示
       addLoading: false,
       addFormRules: {
-		venderId: [{ required: true, message: "请选择厂家", trigger: "change" }],
-		type: [{ required: true, message: "请输入商品类型", trigger: "blur" }]
+		 
+		name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }]
 		
 		 
       },
       //新增界面数据
       addForm: {
-        venderId:"",
+         
         name: "",
-        type: ""
+        address: ""
       }
     };
   },
   methods: {
-    getProducts() {
+    getShops() {
         // this.products = [{"id":122,"name":"aaa",type:"1223","venderName":"aaaas"},
         // {"id":123,"name":"bbb",type:"122311223","venderName":"aaaas"}]
-      let para = { type: this.filters.type };
+      let para = { name: this.filters.name };
       this.listLoading = true;
       let that = this;
       axios
-        .get("/product/getProductsByType", { params: para })
+        .get("/shop/getShopsByName", { params: para })
         .then(function(e) {
           console.log(e);
-          that.products = e.data.products;
+          that.shops = e.data.shops;
           that.listLoading = false;
         })
         .catch(function() {
@@ -170,12 +157,12 @@ export default {
     handleAdd: function() {
       this.addFormVisible = true;
      this.addForm ={
-       vender: {"id":""},
+       
         name: "",
-        type: ""
+        address: ""
 	  }
  
-	this.getVenders();
+ 
 	
     },
 
@@ -190,7 +177,7 @@ export default {
 			console.log(this.addForm);
             let that = this;
             axios
-              .post("/product/addNewProduct", para)
+              .post("/shop/addNewShop", para)
               .then(function(res) {
                 console.log(res);
                 that.addLoading = false;
@@ -200,7 +187,7 @@ export default {
                 });
                 that.$refs["addForm"].resetFields();
                 that.addFormVisible = false;
-                that.getProducts();
+                that.getShops();
               })
               .catch(function() {
                 that.$message({
@@ -209,7 +196,7 @@ export default {
                 });
                 that.$refs["addForm"].resetFields();
                 that.addFormVisible = false;
-                that.getProducts();
+                that.getShops();
               });
           });
         }
@@ -232,7 +219,7 @@ export default {
             let that = this;
 
             axios
-              .patch("/product/modifyProduct", para)
+              .patch("/shop/modifyShop", para)
               .then(function(res) {
                 console.log(res);
                 that.editLoading = false;
@@ -242,7 +229,7 @@ export default {
                 });
                 that.$refs["editForm"].resetFields();
                 that.editFormVisible = false;
-                that.getProducts();
+                that.getShops();
               })
               .catch(function(error) {
                 console.log(error);
@@ -253,7 +240,7 @@ export default {
                 });
                 that.$refs["editForm"].resetFields();
                 that.editFormVisible = false;
-                that.getProducts();
+                that.getShops();
               });
           });
         }
@@ -271,14 +258,14 @@ export default {
           let para = { id: row.id };
           let that = this;
           axios
-            .delete("/product/deleteProductById", { params: para })
+            .delete("/shop/deleteShopById", { params: para })
             .then(function(res) {
               that.listLoading = false;
               that.$message({
                 message: "删除成功",
                 type: "success"
               });
-              that.getProducts();
+              that.getShops();
             })
             .catch(function(error) {
               that.listLoading = false;
@@ -286,7 +273,7 @@ export default {
                 message: "删除失败",
                 type: "error"
               });
-              that.getProducts();
+              that.getShops();
             });
         })
         .catch(() => {});
@@ -305,7 +292,7 @@ export default {
           let para = { ids: ids };
           let that = this;
           axios
-            .delete("/product/deleteProductsByIds", {
+            .delete("/shop/deleteShopsByIds", {
               params: para
              
             })
@@ -315,7 +302,7 @@ export default {
                 message: "删除成功",
                 type: "success"
               });
-              that.getProducts();
+              that.getShops();
             })
             .catch(function(error) {
               that.listLoading = false;
@@ -323,34 +310,17 @@ export default {
                 message: "删除失败",
                 type: "error"
               });
-              that.getProducts();
+              that.getShops();
             });
         })
         .catch(() => {});
 	},
-	  getVenders(){
-			  //   this.venders = [{"id":122,"name":"aaa",telephone:"1223","address":"aaaas"},
-			  // {"id":123,"name":"bbb",telephone:"122311223","address":"aaaas"}]
-          let para = {name: ""}
-        
-                let that = this; 
-                axios.get('/vender/queryVendersByName',{params:para})
-                     .then(function(e){
-                        console.log(e)
-                        that.venders = e.data.venders;
-                       
-                     })
-                     .catch(function(){
-                  
-                     })
-
-		},
+	 
   },
 
 
-
   mounted() {
-	this.getProducts();
+	this.getShops();
 	 
   }
 };
