@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import view2 from '../views/view2.vue'
+ 
 import home from '../views/home.vue'
-//import addProduct from '../views/addProduct.vue'
 
 //厂家管理
 import displayVender from '../views/vender/displayVender.vue'
@@ -13,6 +12,10 @@ import product from '../views/product/product.vue'
 import shop from '../views/shop/shop.vue'
 //客户管理
 import customer from '../views/customer/customer.vue'
+//订单管理
+import order from '../views/order/order.vue'
+//电子图表分析
+import echart from '../views/echart/echart.vue'
 
 Vue.use(Router)
 
@@ -67,9 +70,9 @@ export default new Router({
     component: home,
     name: '订单管理',
     iconCls: 'fa fa-file-text-o',
-    // leaf: true,//只有一个节点
+    leaf: true,//只有一个节点
     children: [
-        { path: '/customer', component: customer, name: '客户' }
+        { path: '/order', component: order, name: '订单管理' }
     ]
 },
 {
@@ -88,7 +91,7 @@ export default new Router({
     name: '图表分析',
     iconCls: 'fa fa-bar-chart',
     children: [
-        { path: '/customer', component: customer, name: 'echarts' }
+        { path: '/echart', component: echart, name: 'echart' }
     ]
 },
   ]
