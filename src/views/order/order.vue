@@ -30,9 +30,7 @@
 				<el-form-item>
 					<el-button type="primary" v-on:click="getOrders">查询</el-button>
 				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
-				</el-form-item>
+			
 			</el-form>
 		</el-col>
 
@@ -44,30 +42,17 @@
 			</el-table-column>
 		 <!-- <el-table-column prop="id" v-if=false width="180" >
 			</el-table-column> -->
-			<el-table-column prop="shopName" label="店铺名称" width="80" sortable>
+			<el-table-column prop="shopName" label="店铺名称" width="120" sortable>
 			</el-table-column>
-		  <el-table-column prop="customer.name" label="客户姓名"  width="80" sortable>
+		  <el-table-column prop="customer.name" label="客户姓名"  width="150" sortable>
 			</el-table-column>
-            <el-table-column prop="venderName" label="厂家名称"  width="80" sortable>
+            <el-table-column prop="deposit" label="定金"  width="120" sortable>
 			</el-table-column>
-             <el-table-column prop="productType" label="商品型号"  width="80" sortable>
+             <el-table-column prop="orderDate" label="下单日期"  width="150" sortable>
 			</el-table-column>
-
-             <el-table-column prop="venderUnitPrice" label="进货单价"  width="80" sortable>
-			</el-table-column>
-
-              <el-table-column prop="sellUnitPrice" label="出售单价"  width="80" sortable>
-			</el-table-column>
-       
-        <el-table-column prop="quantity" label="出售数量"  width="80" sortable>
+       <el-table-column prop="status" label="订单状态"  width="120" sortable>
 			</el-table-column>
 
-            <el-table-column prop="sellTotalPrice" label="出售总价"  width="80" sortable>
-			</el-table-column>
-
-            <el-table-column prop="profit" label="利润"  width="80" sortable>
-			</el-table-column>
-            
 
 			<el-table-column label="操作" width="150">
 				<template slot-scope="scope">
@@ -108,24 +93,7 @@
 			</div>
 		</el-dialog>
 
-		<!--新增界面-->
-		<el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				 
-			
-				<el-form-item label="店铺名称" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-			 
-				<el-form-item label="店铺地址" >
-					<el-input  v-model="addForm.address"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-			</div>
-		</el-dialog>
+	
 	</section>
 </template>
 
@@ -162,20 +130,8 @@ export default {
         
       },
 
-      addFormVisible: false, //新增界面是否显示
-      addLoading: false,
-      addFormRules: {
-		 
-		name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }]
-		
-		 
-      },
-      //新增界面数据
-      addForm: {
-         
-        name: "",
-        address: ""
-      }
+      
+    
     };
   },
   methods: {
@@ -247,54 +203,19 @@ export default {
       //    ]
     },
     //显示新增界面
-    handleAdd: function() {
-      this.addFormVisible = true;
-     this.addForm ={
+    // handleAdd: function() {
+    //   this.addFormVisible = true;
+    //  this.addForm ={
        
-        name: "",
-        address: ""
-	  }
+    //     name: "",
+    //     address: ""
+	  // }
  
  
 	
-    },
+    // },
 
-    //新增
-    addSubmit: function() {
-      this.$refs.addForm.validate(valid => {
-        if (valid) {
-          this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            this.addLoading = true;
-            //NProgress.start();
-			let para = Object.assign({}, this.addForm);
-			console.log(this.addForm);
-            let that = this;
-            axios
-              .post("/shop/addNewShop", para)
-              .then(function(res) {
-                console.log(res);
-                that.addLoading = false;
-                that.$message({
-                  message: "提交成功",
-                  type: "success"
-                });
-                that.$refs["addForm"].resetFields();
-                that.addFormVisible = false;
-                that.getOrders();
-              })
-              .catch(function() {
-                that.$message({
-                  message: "提交失败",
-                  type: "error"
-                });
-                that.$refs["addForm"].resetFields();
-                that.addFormVisible = false;
-                that.getOrders();
-              });
-          });
-        }
-      });
-    },
+
 
     //显示编辑界面
     handleEdit: function(index, row) {
