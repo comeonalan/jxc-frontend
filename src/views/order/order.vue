@@ -46,7 +46,7 @@
 			</el-table-column>
 		  <el-table-column prop="customer.name" label="客户姓名"  width="150" sortable>
 			</el-table-column>
-            <el-table-column prop="deposit" label="定金"  width="120" sortable>
+            <el-table-column prop="deposit" label="定金(元)"  width="120" sortable>
 			</el-table-column>
              <el-table-column prop="orderDate" label="下单日期"  width="150" sortable>
 			</el-table-column>
@@ -77,15 +77,51 @@
 					<el-input v-model="editForm.id" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="店铺名称" prop="name">
-					<el-input v-model="editForm.name" :disabled=true auto-complete="off"></el-input>
+				<el-form-item label="店铺名称" prop="shopName">
+				  <el-select v-model="editForm.shopName"  filterable placeholder="请选择店铺">
+            <el-option
+           v-for="item in shops"
+           :key="item.id"
+          :label="item.name"
+           :value="item.name">
+         </el-option>
+            </el-select>
 				</el-form-item>
 			 
-				<el-form-item label="店铺地址" prop="address">
-					<el-input v-model="editForm.address" ></el-input>
+				<el-form-item label="客户姓名"  prop="customerId">
+				<el-select v-model="editForm.customer.id" :disabled="true"   filterable placeholder="请选择客户">
+       <el-option
+      v-for="item in customers"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id">
+         </el-option>
+              </el-select>
 				</el-form-item>
+
+        <el-form-item label="下单日期" prop="orderDate">
+   <el-date-picker type="date" placeholder="选择日期" v-model="editForm.orderDate" style="width: 100%;"></el-date-picker>
+                </el-form-item>
 				 
-			 
+			  <el-form-item label="定金(元)" prop="deposit">
+                   <el-input  v-model="editForm.deposit"></el-input>
+ 
+                </el-form-item>
+
+                 <el-form-item label="状态" prop="status">
+                   
+
+                   	<el-select v-model="editForm.status"   filterable placeholder="请选择客户">
+       <el-option
+      v-for="item in allStatus"
+      :key="item.name"
+      :label="item.name"
+      :value="item.name">
+         </el-option>
+              </el-select>
+ 
+                </el-form-item>
+
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -98,9 +134,7 @@
 </template>
 
 <script>
-//import util from '../../common/js/util'
-//import NProgress from 'nprogress'
-// import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+ 
 import axios from "axios";
 export default {
   data() {
@@ -120,15 +154,20 @@ export default {
       editFormVisible: false, //编辑界面是否显示
       editLoading: false,
       editFormRules: {
-        name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }]
+        deposit: [{ required: true, message: "请输入定金", trigger: "blur" }]
       },
       //编辑界面数据
       editForm: {
         id: 0,
-        name: "",
-        address: "",
+        shopName: "",
+        customer: {"id":""},
+        orderDate:"",
+        deposit:"",
+        status:""
         
       },
+
+      allStatus:[{"name":"已下单"},{"name":"已完成"}]
 
       
     
@@ -140,9 +179,7 @@ export default {
 				this.getOrders();
 			},
 
-    getOrders() {
-        // this.products = [{"id":122,"name":"aaa",type:"1223","venderName":"aaaas"},
-        // {"id":123,"name":"bbb",type:"122311223","venderName":"aaaas"}]
+    getOrders() { 
    
       let para = { customerIds: this.filters.customerIds.toString(),shopNames:this.filters.shopNames.toString(),page: this.page,};
       this.listLoading = true;
@@ -158,63 +195,25 @@ export default {
         .catch(function() {
           that.listLoading = false;
         });
-      // this.orders = [
-     
-      //   {
-      //       "id": 146,
-      //       "productType": "B型号",
-      //       "venderName": "艾是墙布",
-      //       "quantity": 100,
-      //       "venderUnitPrice": 150,
-      //       "sellUnitPrice": 270,
-      //       "shopName": "汉阳欧亚达",
-      //       "venderTotalPrice": 0,
-      //       "sellTotalPrice": 0,
-      //       "profit": 0,
-      //       "orderDate": "2018-04-01",
-      //       "customer": {
-      //           "id": 7,
-      //           "name": "张三",
-      //           "sex": "男",
-      //           "address": "上海市xxxx浦东的",
-      //           "telephone": "18302174508"
-      //       }
-      //   },
-      //   {
-      //       "id": 150,
-      //       "productType": "A22型号",
-      //       "venderName": "艾是墙布",
-      //       "quantity": 20,
-      //       "venderUnitPrice": 100,
-      //       "sellUnitPrice": 200,
-      //       "shopName": "居然之家",
-      //       "venderTotalPrice": 0,
-      //       "sellTotalPrice": 0,
-      //       "profit": 0,
-      //       "orderDate": "2018-04-01",
-      //       "customer": {
-      //           "id": 7,
-      //           "name": "张三",
-      //           "sex": "男",
-      //           "address": "上海市xxxx浦东的",
-      //           "telephone": "18302174508"
-      //       }
-      //   }
-      //    ]
-    },
-    //显示新增界面
-    // handleAdd: function() {
-    //   this.addFormVisible = true;
-    //  this.addForm ={
-       
-    //     name: "",
-    //     address: ""
-	  // }
- 
- 
-	
-    // },
 
+    //   this.orders = [
+    //     {
+    //         "id": 156,
+    //         "shopName": "居然之家",
+    //         "orderDate": "2018-04-01",
+    //         "deposit": 1000,
+    //         "status": "已下单",
+    //         "customer": {
+    //             "id": 7,
+    //             "name": "张三",
+    //             "sex": "男",
+    //             "address": "上海市xxxx浦东的",
+    //             "telephone": "18302174508"
+    //         }
+    //     }
+    // ]
+    },
+  
 
 
     //显示编辑界面
@@ -233,12 +232,12 @@ export default {
             let that = this;
 
             axios
-              .patch("/shop/modifyShop", para)
+              .patch("/order/modifyOrder", para)
               .then(function(res) {
                 console.log(res);
                 that.editLoading = false;
                 that.$message({
-                  message: "提交成功",
+                  message:res.data,
                   type: "success"
                 });
                 that.$refs["editForm"].resetFields();
@@ -263,7 +262,7 @@ export default {
 
     //删除
     handleDel: function(index, row) {
-      this.$confirm("确认删除该厂家吗?", "提示", {
+      this.$confirm("确认删除该订单吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -272,7 +271,7 @@ export default {
           let para = { id: row.id };
           let that = this;
           axios
-            .delete("/shop/deleteShopById", { params: para })
+            .delete("/order/deleteOrderById", { params: para })
             .then(function(res) {
               that.listLoading = false;
               that.$message({
@@ -306,14 +305,14 @@ export default {
           let para = { ids: ids };
           let that = this;
           axios
-            .delete("/shop/deleteShopsByIds", {
+            .delete("/order/deleteOrdersByIds", {
               params: para
              
             })
             .then(function(res) {
               that.listLoading = false;
               that.$message({
-                message: "删除成功",
+                message: res.data,
                 type: "success"
               });
               that.getOrders();
@@ -331,8 +330,8 @@ export default {
     },
     
       getCustomers() {
-        // this.customers = [{"id":122,"name":"aaa",type:"1223","venderName":"aaaas"},
-        // {"id":123,"name":"bbb",type:"122311223","venderName":"aaaas"}]
+        // this.customers = [{"id":8,"name":"李四",type:"1223","venderName":"aaaas"},
+        // {"id":7,"name":"张三",type:"122311223","venderName":"aaaas"}]
       let para = { name: "" };
       
       let that = this;
