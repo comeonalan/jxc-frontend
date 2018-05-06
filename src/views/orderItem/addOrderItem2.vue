@@ -1,38 +1,12 @@
 <template>
 <section>
+<div class="orderInfo">	
+<pre>
+  <label class="header">店铺名称: </label>{{currentOrder.shopName}} <label class="header">客户姓名: </label>{{currentOrder.customerName}} <label class="header">下单日期：</label>{{currentOrder.orderDate}}
+</pre>
+			</div>
 <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm" style="margin:20px;width:60%;min-width:600px;">
 				 
-			
-				<el-form-item label="店铺名称">
-					 
-        <el-select v-model="addForm.shopName"  filterable placeholder="请选择店铺">
-            <el-option
-           v-for="item in shops"
-           :key="item.id"
-          :label="item.name"
-           :value="item.name">
-         </el-option>
-            </el-select>
-
-				</el-form-item>
-
-                <el-form-item label="客户姓名" >
-                    <el-select v-model="addForm.customerId"  filterable placeholder="请选择客户">
-       <el-option
-      v-for="item in customers"
-      :key="item.id"
-      :label="item.name"
-      :value="item.id">
-         </el-option>
-              </el-select>
-					 
-				</el-form-item>
-
-
-                <el-form-item label="下单日期">
-   <el-date-picker type="date" placeholder="选择日期" v-model="addForm.orderDate" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-			 
 				<el-form-item label="商品型号" >
 				<el-select v-model="addForm.productType"  filterable placeholder="选择商品型号">
        <el-option
@@ -87,7 +61,15 @@ export default {
       },
       shops:[],
       customers:[],
-      products:[]
+      products:[],
+      currentOrder: {
+       "id":"",
+       "customerName":"",
+       "shopName":"",
+       "orderDate":"",
+       "status":"",
+       "deposit":""
+      }
     };
 },
 methods: {
@@ -141,19 +123,44 @@ methods: {
     //     });
     },
 
+// setOrder:function(order) {
+//   let shopName = order.shopName;
+//    console.log(shopName);
+//    this.currentOrder.shopName = shopName
+   
+// }
 
 
 },
 
  mounted() {
-  this.getShops();
-  this.getCustomers();
-  this.getProducts(); 	 
+    let order = this.$route.query.order;
+   
+     this.currentOrder.shopName = order.shopName;
+     this.currentOrder.customerName = order.customer.name;
+     this.currentOrder.orderDate = order.orderDate;
+     this.currentOrder.id = order.id;
+  // this.getShops();
+  // this.getCustomers();
+  // this.getProducts(); 	 
+  },
+
+  beforeMount() {
+ 
   }
+
 
 
 }
 </script>
+
+
+<<style type="text/css">
+.orderInfo .header{
+   font-weight:bold;
+}
+</style>
+
 
   
  

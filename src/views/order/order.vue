@@ -44,20 +44,23 @@
 			</el-table-column> -->
 			<el-table-column prop="shopName" label="店铺名称" width="120" sortable>
 			</el-table-column>
-		  <el-table-column prop="customer.name" label="客户姓名"  width="150" sortable>
+		  <el-table-column prop="customer.name" label="客户姓名"  width="120" sortable>
 			</el-table-column>
             <el-table-column prop="deposit" label="定金(元)"  width="120" sortable>
 			</el-table-column>
-             <el-table-column prop="orderDate" label="下单日期"  width="150" sortable>
+             <el-table-column prop="orderDate" label="下单日期"  width="120" sortable>
 			</el-table-column>
        <el-table-column prop="status" label="订单状态"  width="120" sortable>
 			</el-table-column>
 
 
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="250">
 				<template slot-scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" @click="handleAddItems(scope.$index, scope.row)">维护</el-button>
+          
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+          <!-- <router-link :to="{ name: 'addOrder'}">维护</router-link> -->
 				</template>
 			</el-table-column>
 		</el-table>
@@ -128,14 +131,20 @@
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
 		</el-dialog>
-
+   
+							<router-view></router-view>
+					 
 	
 	</section>
+
+
 </template>
 
 <script>
  
 import axios from "axios";
+import VueRouter from 'vue-router';
+import addOrder from './addOrder.vue'
 export default {
   data() {
     return {
@@ -362,6 +371,11 @@ export default {
            
         });
     },
+
+    handleAddItems: function(index,row){
+
+this.$router.push({path:'/orderDetail',query:{order: row}});
+    }
 	 
   },
 

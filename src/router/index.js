@@ -15,6 +15,7 @@ import customer from '../views/customer/customer.vue'
 //订单管理
 import order from '../views/order/order.vue'
 import addOrder from '../views/order/addOrder.vue'
+import orderDetail from '../views/orderItem/orderDetail.vue'
 //电子图表分析
 import echart from '../views/echart/echart.vue'
 
@@ -23,11 +24,7 @@ Vue.use(Router)
 export default new Router({
   linkActiveClass:'active',
   routes: [
-//     {
-//       path: '/addShop',
-//       component:addShop
-
-//   },
+  
 //   {
 //       path:'/view2',
 //       component:view2
@@ -74,7 +71,9 @@ export default new Router({
     //leaf: true,//只有一个节点
     children: [
         { path: '/order', component: order, name: '查询订单' },
-        { path: '/addOrder', component: addOrder, name: '新增订单' }
+        { path: '/addOrder', component: addOrder, name: '新增订单' },
+        { path: '/orderDetail', component: orderDetail, name: '添加订单商品',hidden:true}
+         
     ]
 },
 {
@@ -95,6 +94,9 @@ export default new Router({
     children: [
         { path: '/echart', component: echart, name: 'echart' }
     ]
-},
+}
+
+ 
+ 
   ]
 })
