@@ -16,7 +16,7 @@ import customer from '../views/customer/customer.vue'
 import order from '../views/order/order.vue'
 import addOrder from '../views/order/addOrder.vue'
 //import orderDetail from '../views/orderItem/orderDetail.vue'
-import orderDetail2 from '../views/orderItem/orderDetail2.vue'
+import orderDetail3 from '../views/orderItem/orderDetail3.vue'
 //电子图表分析
 import echart from '../views/echart/echart.vue'
 
@@ -73,7 +73,7 @@ export default new Router({
     children: [
         { path: '/order', component: order, name: '查询订单' },
         { path: '/addOrder', component: addOrder, name: '新增订单' },
-        { path: '/orderDetail', component: orderDetail2, name: '添加订单商品',hidden:true}
+        { path: '/orderDetail', component: orderDetail3, name: '添加订单商品',hidden:true}
          
     ]
 },
